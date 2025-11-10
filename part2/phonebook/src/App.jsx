@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 
 const Person = ({ person }) => {
   return <p>{person.name}: {person.number}</p>
@@ -33,14 +34,20 @@ const Filter = ({ filter, handleFilterChange}) => {
 }
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456' },
-  ]) 
+  const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
 
-  console.log('test')
+  useEffect(() => {
+    console.log('effect invoked')
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        console.log('promise fulfilled')
+        setPersons(response.data)
+      })
+  }, [])
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
@@ -60,7 +67,6 @@ const App = () => {
       name: newName,
       number: newNumber
     }
-    console.log('attempting to add', newPerson)
     if (persons.some(person => person.name.toLowerCase() === newPerson.name.toLowerCase())) {
       alert(`${newPerson.name} is already added to phonebook`)
     } else if (newPerson.name === '' || newPerson.number === '') {
@@ -69,12 +75,12 @@ const App = () => {
       setPersons(persons.concat(newPerson))
       setNewName('')
       setNewNumber('')
+      console.log('Added', newPerson)
     }
   }
 
   let filteredPersons = []
   if (filter === '') {
-    console.log('No filter applied, showing all persons')
     filteredPersons = persons
   } else {
     console.log('Filter applied, showing persons matching:', filter)
