@@ -3,7 +3,13 @@ const morgan = require('morgan')
 
 const app = express()
 
+// Use express.json() middleware to parse the request body as JSON when appropriate
 app.use(express.json())
+
+// Use static middleware to serve the frontend build
+app.use(express.static('dist'))
+
+// Use and configure morgan middleware for logging
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :data', {
     skip: (req) => req.method !== 'POST',
     stream: process.stdout
@@ -11,28 +17,27 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :d
 app.use(morgan('tiny', {
     skip: (req) => req.method === 'POST'
 }))
-
 morgan.token('data', (req) => req.method === 'POST' ? JSON.stringify(req.body) : '')
 
 let persons = [
-    { 
+    {
       "id": "1",
-      "name": "Arto Hellas", 
+      "name": "Arto Hellas",
       "number": "040-123456"
     },
-    { 
+    {
       "id": "2",
-      "name": "Ada Lovelace", 
+      "name": "Ada Lovelace",
       "number": "39-44-5323523"
     },
-    { 
+    {
       "id": "3",
-      "name": "Dan Abramov", 
+      "name": "Dan Abramov",
       "number": "12-43-234345"
     },
-    { 
+    {
       "id": "4",
-      "name": "Mary Poppendieck", 
+      "name": "Mary Poppendieck",
       "number": "39-23-6423122"
     }
 ]
@@ -79,7 +84,7 @@ app.post('/api/persons', (request, response) => {
         name,
         number
     }
-    
+
     persons = persons.concat(newPerson)
     response.status(201).json(newPerson)
 })

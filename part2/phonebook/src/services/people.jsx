@@ -1,5 +1,6 @@
 import axios from 'axios'
 
+// Change to '/api/persons' when building and running with backend
 const baseUrl = 'http://localhost:3001/persons'
 
 const getAll = () => {
