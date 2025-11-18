@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-// Change to '/api/persons' when building and running with backend
-const baseUrl = 'http://localhost:3001/persons'
+// Change to 'http://localhost:3001/persons' if using json-server backend
+const baseUrl = '/api/persons'
 
 const getAll = () => {
   const request = axios.get(baseUrl)
