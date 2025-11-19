@@ -6,7 +6,7 @@ import Notification from './components/Notification'
 import peopleService from './services/people'
 
 const App = () => {
-  const [persons, setPersons] = useState([]) 
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
@@ -36,9 +36,7 @@ const App = () => {
       name: newName,
       number: newNumber
     }
-    if (newPerson.name === '' || newPerson.number === '') {
-      alert('Name or number cannot be empty')
-    } else if (persons.some(person => person.name.toLowerCase() === newPerson.name.toLowerCase())) {
+    if (persons.some(person => person.name.toLowerCase() === newPerson.name.toLowerCase())) {
       if (window.confirm(`${newPerson.name} is already added to phonebook, replace the old number with a new one?`)) {
         const personToUpdate = persons.find(person => person.name.toLowerCase() === newPerson.name.toLowerCase())
         const updatedPerson = { ...personToUpdate, name: newPerson.name, number: newPerson.number }
@@ -53,6 +51,11 @@ const App = () => {
             setNotification({ message: `Updated ${returnedPerson.name}'s number`, type: 'add' })
             setTimeout(() => {setNotification({ message: null, type: null })}, 2000)
           })
+          .catch(error => {
+            console.log('Error updating person', error)
+            setNotification({ message: error.response.data.error, type: 'error' })
+            setTimeout(() => {setNotification({ message: null, type: null })}, 2000)
+          })
       }
     } else {
       peopleService
@@ -63,6 +66,11 @@ const App = () => {
           setNewName('')
           setNewNumber('')
           setNotification({ message: `Added ${returnedPerson.name}`, type: 'add' })
+          setTimeout(() => {setNotification({ message: null, type: null })}, 2000)
+        })
+        .catch(error => {
+          console.log('Error creating person', error)
+          setNotification({ message: error.response.data.error, type: 'error' })
           setTimeout(() => {setNotification({ message: null, type: null })}, 2000)
         })
     }
@@ -96,8 +104,8 @@ const App = () => {
       <Filter filter={filter} handleFilterChange={handleFilterChange}/>
       <h3>Add a new</h3>
       <Notification message={notification.message} type={notification.type}/>
-      <PersonForm 
-        newName={newName} 
+      <PersonForm
+        newName={newName}
         newNumber={newNumber}
         handleNameChange={handleNameChange}
         handleNumberChange={handleNumberChange}

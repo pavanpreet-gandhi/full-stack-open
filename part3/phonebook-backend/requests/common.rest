@@ -27,3 +27,12 @@ Content-Type: application/json
   "name": "John Doe",
   "number": "098-765-4321"
 }
+
+### POST an empty person
+POST http://localhost:3001/api/persons/
+Content-Type: application/json
+
+{
+  "name": "Mark",
+  "number": ""
+}

@@ -13,8 +13,16 @@ mongoose.connect(url, { family: 4 })
   })
 
 const personSchema = new mongoose.Schema({
-    name: String,
-    number: String,
+    name: {
+      type: String,
+      minLength: 3,
+      required: true
+    },
+    number: {
+      type: String,
+      minLength: 1,
+      required: true
+    }
 })
 personSchema.set('toJSON', { // This is to remove __v and rename _id to id in the JSON representation of the document
     transform: (document, returnedObject) => {

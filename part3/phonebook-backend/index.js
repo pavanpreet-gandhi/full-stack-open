@@ -57,9 +57,6 @@ app.delete('/api/persons/:id', (request, response, next) => {
 
 app.post('/api/persons', (request, response, next) => {
     const { name, number } = request.body
-    if (!name || !number) {
-        return response.status(400).json({ error: 'Name or number is missing' })
-    }
     Person.findOne({ name: name })
         .then(existingPerson => {
             if (existingPerson) {
@@ -108,6 +105,8 @@ const errorHandler = (error, request, response, next) => {
   console.error(error.message)
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
   }
   next(error)
 }

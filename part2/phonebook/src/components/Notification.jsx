@@ -4,9 +4,11 @@ const Notification = ({ message, type }) => {
     }
     let notificationStyle = { color: 'black' }
     if (type === 'add') {
-    notificationStyle = { color: 'green' }
+        notificationStyle = { color: 'green' }
     } else if (type === 'blue') {
-    notificationStyle = { color: 'red' }
+        notificationStyle = { color: 'red' }
+    } else if (type === 'error') {
+        notificationStyle = { color: 'red' }
     }
     return (
         <div style={notificationStyle}>
